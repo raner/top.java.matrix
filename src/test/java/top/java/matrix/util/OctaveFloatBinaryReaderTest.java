@@ -10,7 +10,16 @@ import static org.junit.Assert.assertEquals;
 public class OctaveFloatBinaryReaderTest
 {
     @Test
-    public void test() throws Exception {
+    public void testMatrixA() throws Exception {
+        OctaveFloatBinaryReader reader = new OctaveFloatBinaryReader();
+        Path path = new File("src/test/resources/MatrixA.float.bin").getAbsoluteFile().toPath();
+        RawFloatMatrix raw = reader.readFloatBinaryMatrix(path);
+        assertEquals(4000, raw.rows());
+        assertEquals(4000, raw.columns());
+    }
+
+    @Test
+    public void testMatrixB() throws Exception {
         OctaveFloatBinaryReader reader = new OctaveFloatBinaryReader();
         Path path = new File("src/test/resources/MatrixB.float.bin").getAbsoluteFile().toPath();
         RawFloatMatrix raw = reader.readFloatBinaryMatrix(path);
