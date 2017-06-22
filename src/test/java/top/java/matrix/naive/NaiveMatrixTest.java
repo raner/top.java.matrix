@@ -1,16 +1,29 @@
 package top.java.matrix.naive;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import org.junit.Before;
-import org.junit.Test;
-import top.java.matrix.Dimension;
-import top.java.matrix.Matrix;
-import top.java.matrix.util.OctaveFloatBinaryReader;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Function;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
+
+import top.java.matrix.Dimension;
+import top.java.matrix.Matrix;
+import top.java.matrix.util.OctaveFloatBinaryReader;
+import top.java.matrix.util.RawFloatMatrix;
+import static top.java.matrix.util.RawFloatMatrix.FACTORY;
+
+@RunWith(Parameterized.class)
 public class NaiveMatrixTest<M extends Dimension>
 {
     private OctaveFloatBinaryReader reader = new OctaveFloatBinaryReader();
@@ -20,14 +33,23 @@ public class NaiveMatrixTest<M extends Dimension>
     private Matrix<M, M> squared;
     private float δ = 1E-6F;
 
+    @Parameter
+    public Function<RawFloatMatrix, Matrix<M, M>> constructor;
+
+    @Parameters
+    public static List<Object[]> implementations() {
+        Function<RawFloatMatrix, Matrix<?, ?>> naive = NaiveMatrix::new;
+        return Collections.singletonList(new Object[] {naive});
+    }
+
     @Before
     public void initializeMatrices() throws IOException
     {
         // TODO: load only once!
-        A = new NaiveMatrix<>(reader.readFloatBinaryMatrix(path("MatrixA.float.bin")));
-        B = new NaiveMatrix<>(reader.readFloatBinaryMatrix(path("MatrixB.float.bin")));
-        thousand = new NaiveMatrix<>(reader.readFloatBinaryMatrix(path("Thousand.float.bin")));
-        squared = new NaiveMatrix<>(reader.readFloatBinaryMatrix(path("Squared.float.bin")));
+        A = constructor.apply(reader.readFloatBinaryMatrix(path("MatrixA.float.bin")));
+        B = constructor.apply(reader.readFloatBinaryMatrix(path("MatrixB.float.bin")));
+        thousand = constructor.apply(reader.readFloatBinaryMatrix(path("Thousand.float.bin")));
+        squared = constructor.apply(reader.readFloatBinaryMatrix(path("Squared.float.bin")));
     }
 
     @Test
@@ -63,9 +85,9 @@ public class NaiveMatrixTest<M extends Dimension>
     @Test
     public void testSmallMultiplication3x3()
     {
-        final Matrix<M, M> X = new NaiveMatrix<>(3, 3, new float[] {8, 5, 2, 1, 9, 7, 3, 0, 4});
-        final Matrix<M, M> Y = new NaiveMatrix<>(3, 3, new float[] {8, 3, 4, 1, 5, 9, 6, 7, 2});
-        Matrix<M, M> expected = new NaiveMatrix<>(3, 3, new float[] {79, 67, 53, 40, 50, 73, 61, 93, 69});
+        final Matrix<M, M> X = constructor.apply(FACTORY.create(3, 3, new float[] {8, 5, 2, 1, 9, 7, 3, 0, 4}));
+        final Matrix<M, M> Y = constructor.apply(FACTORY.create(3, 3, new float[] {8, 3, 4, 1, 5, 9, 6, 7, 2}));
+        Matrix<M, M> expected = constructor.apply(FACTORY.create(3, 3, new float[] {79, 67, 53, 40, 50, 73, 61, 93, 69}));
         Matrix<M, M> result = X.times(Y);
         assertEquals(expected, result);
     }
@@ -73,9 +95,9 @@ public class NaiveMatrixTest<M extends Dimension>
     @Test
     public void testSmallMultiplication3x5by5x2()
     {
-        final Matrix<M, M> X = new NaiveMatrix<>(3, 5, new float[] {1, 6, 11, 2, 7, 12, 3, 8, 13, 4, 9, 14, 5, 10, 15});
-        final Matrix<M, M> Y = new NaiveMatrix<>(5, 2, new float[] {1, 3, 5, 7, 9, 2, 4, 6, 8, 10});
-        Matrix<M, M> expected = new NaiveMatrix<>(3, 2, new float[] {95, 220, 345, 110, 260, 410});
+        final Matrix<M, M> X = constructor.apply(FACTORY.create(3, 5, new float[] {1, 6, 11, 2, 7, 12, 3, 8, 13, 4, 9, 14, 5, 10, 15}));
+        final Matrix<M, M> Y = constructor.apply(FACTORY.create(5, 2, new float[] {1, 3, 5, 7, 9, 2, 4, 6, 8, 10}));
+        Matrix<M, M> expected = constructor.apply(FACTORY.create(3, 2, new float[] {95, 220, 345, 110, 260, 410}));
         Matrix<M, M> result = X.times(Y);
         assertEquals(expected, result);
     }
