@@ -83,6 +83,12 @@ public class NaiveMatrix<ROWS extends Dimension, COLUMNS extends Dimension> impl
     }
 
     @Override
+    public float[] getValues()
+    {
+        return matrix;
+    }
+
+    @Override
     public boolean equals(Object other)
     {
         if (other instanceof NaiveMatrix)

@@ -18,5 +18,7 @@ public interface Matrix<ROWS extends Dimension, COLUMNS extends Dimension>
 
     int getColumns();
 
+    float[] getValues();
+
     float at(int zeroIndexedRow, int zeroIndexedColumn);
 }
