@@ -2,6 +2,8 @@ package top.java.matrix.fast;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.function.Function;
+
 import com.aparapi.Kernel;
 import com.aparapi.Range;
 import top.java.matrix.Dimension;
@@ -24,6 +26,12 @@ public class FastMatrix<ROWS extends Dimension, COLUMNS extends Dimension> imple
         rows = matrix.rows();
         columns = matrix.columns();
         this.matrix = matrix.matrix();
+    }
+
+    @Override
+    public Function<RawFloatMatrix, Matrix<?, ?>> constructor()
+    {
+        return FastMatrix::new;
     }
 
     @Override

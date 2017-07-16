@@ -2,6 +2,8 @@ package top.java.matrix.fast;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.function.Function;
+
 import com.aparapi.Kernel;
 import com.aparapi.Range;
 import top.java.matrix.Dimension;
@@ -28,6 +30,12 @@ public class ReversedFastMatrix<ROWS extends Dimension, COLUMNS extends Dimensio
         rows = matrix.rows();
         columns = matrix.columns();
         this.matrix = matrix.matrix();
+    }
+
+    @Override
+    public Function<RawFloatMatrix, Matrix<?, ?>> constructor()
+    {
+        return ReversedFastMatrix::new;
     }
 
     @Override

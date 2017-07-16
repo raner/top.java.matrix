@@ -1,5 +1,8 @@
 package top.java.matrix;
 
+import java.util.function.Function;
+import top.java.matrix.util.RawFloatMatrix;
+
 /**
 * The {@link Matrix} interface describes a single-precision matrix of arbitrary (but type-safe) dimensions.
 *
@@ -10,6 +13,8 @@ package top.java.matrix;
 **/
 public interface Matrix<ROWS extends Dimension, COLUMNS extends Dimension>
 {
+    Function<RawFloatMatrix, Matrix<?, ?>> constructor();
+
     <DIMENSION extends Dimension> Matrix<ROWS, DIMENSION> times(Matrix<COLUMNS, DIMENSION> rightHandSide);
 
     Matrix<COLUMNS, ROWS> transpose();

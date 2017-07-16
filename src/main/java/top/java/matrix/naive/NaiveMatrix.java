@@ -2,6 +2,7 @@ package top.java.matrix.naive;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.function.Function;
 
 import top.java.matrix.Dimension;
 import top.java.matrix.Matrix;
@@ -18,6 +19,12 @@ public class NaiveMatrix<ROWS extends Dimension, COLUMNS extends Dimension> impl
         this.rows = rows;
         this.columns = columns;
         this.matrix = matrix;
+    }
+
+    @Override
+    public Function<RawFloatMatrix, Matrix<?, ?>> constructor()
+    {
+        return NaiveMatrix::new;
     }
 
     public NaiveMatrix(RawFloatMatrix matrix)
