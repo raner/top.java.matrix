@@ -110,12 +110,12 @@ public class FastMatrix<ROWS extends Dimension, COLUMNS extends Dimension> imple
     @Override
     public boolean equals(Object other)
     {
-        if (other instanceof FastMatrix)
+        if (other instanceof Matrix)
         {
-            FastMatrix<?, ?> otherMatrix = (FastMatrix<?, ?>)other;
+            Matrix<?, ?> otherMatrix = (Matrix<?, ?>)other;
             if (rows == otherMatrix.getRows() && columns == otherMatrix.getColumns())
             {
-                return Arrays.equals(otherMatrix.matrix, matrix);
+                return Arrays.equals(otherMatrix.getValues(), matrix);
             }
         }
         return false;

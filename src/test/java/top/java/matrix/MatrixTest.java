@@ -19,6 +19,8 @@ import org.junit.runners.Parameterized.Parameters;
 import top.java.matrix.Dimension;
 import top.java.matrix.Matrix;
 import top.java.matrix.fast.FastMatrix;
+import top.java.matrix.fast.ReversedFastMatrix;
+import top.java.matrix.fast.TiledFastMatrix;
 import top.java.matrix.naive.NaiveMatrix;
 import top.java.matrix.util.OctaveFloatBinaryReader;
 import static top.java.matrix.util.RawFloatMatrix.FACTORY;
@@ -37,10 +39,16 @@ public class MatrixTest<M extends Dimension>
     public MatrixConstructor<M, M> constructor;
 
     @Parameters(name="{0}")
-    public static List<Object[]> implementations() {
-        MatrixConstructor<?, ?> naive = new MatrixConstructor<>(NaiveMatrix::new);
-        MatrixConstructor<?, ?> fast = new MatrixConstructor<>(FastMatrix::new);
-        return Arrays.asList(new Object[][] {{naive}, {fast}});
+    public static List<Object[]> implementations()
+    {
+        Object[][] implementations =
+        {
+            {new MatrixConstructor<>(NaiveMatrix::new)},
+            {new MatrixConstructor<>(ReversedFastMatrix::new)},
+            {new MatrixConstructor<>(FastMatrix::new)},
+            {new MatrixConstructor<>(TiledFastMatrix::new)}
+        };
+        return Arrays.asList(implementations);
     }
 
     @Before

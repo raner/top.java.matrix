@@ -114,12 +114,12 @@ public class ReversedFastMatrix<ROWS extends Dimension, COLUMNS extends Dimensio
     @Override
     public boolean equals(Object other)
     {
-        if (other instanceof ReversedFastMatrix)
+        if (other instanceof Matrix)
         {
-            ReversedFastMatrix<?, ?> otherMatrix = (ReversedFastMatrix<?, ?>)other;
+            Matrix<?, ?> otherMatrix = (Matrix<?, ?>)other;
             if (rows == otherMatrix.getRows() && columns == otherMatrix.getColumns())
             {
-                return Arrays.equals(otherMatrix.matrix, matrix);
+                return Arrays.equals(otherMatrix.getValues(), matrix);
             }
         }
         return false;

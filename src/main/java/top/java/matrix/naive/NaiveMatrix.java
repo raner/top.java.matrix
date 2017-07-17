@@ -98,12 +98,12 @@ public class NaiveMatrix<ROWS extends Dimension, COLUMNS extends Dimension> impl
     @Override
     public boolean equals(Object other)
     {
-        if (other instanceof NaiveMatrix)
+        if (other instanceof Matrix)
         {
-            NaiveMatrix<?, ?> otherMatrix = (NaiveMatrix<?, ?>)other;
+            Matrix<?, ?> otherMatrix = (Matrix<?, ?>)other;
             if (rows == otherMatrix.getRows() && columns == otherMatrix.getColumns())
             {
-                return Arrays.equals(otherMatrix.matrix, matrix);
+                return Arrays.equals(otherMatrix.getValues(), matrix);
             }
         }
         return false;
