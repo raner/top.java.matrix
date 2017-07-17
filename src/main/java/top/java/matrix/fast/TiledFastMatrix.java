@@ -71,8 +71,8 @@ public class TiledFastMatrix<ROWS extends Dimension, COLUMNS extends Dimension> 
         final int TILE_SIZE = tileSize;
         Kernel kernel = new Kernel()
         {
-            @Local final float[] tileA = new float[TILE_SIZE*TILE_SIZE];
-            @Local final float[] tileB = new float[TILE_SIZE*TILE_SIZE];
+            @Local final float[][] tileA = new float[TILE_SIZE][TILE_SIZE];
+            @Local final float[][] tileB = new float[TILE_SIZE][TILE_SIZE];
 
             @Override
             public void run()
@@ -88,8 +88,8 @@ public class TiledFastMatrix<ROWS extends Dimension, COLUMNS extends Dimension> 
                 {
                     @Constant int tiledRow = TILE_SIZE*tile + localRow;
                     @Constant int tiledColumn = TILE_SIZE*tile + localColumn;
-                    tileA[localColumn*TILE_SIZE + localRow] = A[tiledColumn*numberOfRows + row];
-                    tileB[localColumn*TILE_SIZE + localRow] = B[column*numberOfColumns + tiledRow];
+                    tileA[localColumn][localRow] = A[tiledColumn*numberOfRows + row];
+                    tileB[localColumn][localRow] = B[column*numberOfColumns + tiledRow];
 
                     // Ensure that the entire tile is loaded before starting the computation:
                     //
@@ -97,7 +97,7 @@ public class TiledFastMatrix<ROWS extends Dimension, COLUMNS extends Dimension> 
 
                     for (int repeat = 0; repeat < TILE_SIZE; repeat++)
                     {
-                        value += tileA[repeat*TILE_SIZE + localRow] * tileB[localColumn*TILE_SIZE + repeat];
+                        value += tileA[repeat][localRow] * tileB[localColumn][repeat];
                     }
 
                     // Make sure all computations are finished before loading the next tile:
