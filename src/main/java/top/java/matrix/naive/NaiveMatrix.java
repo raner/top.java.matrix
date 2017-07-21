@@ -1,9 +1,23 @@
+//                                                                          //
+// Copyright 2017 Mirko Raner                                               //
+//                                                                          //
+// Licensed under the Apache License, Version 2.0 (the "License");          //
+// you may not use this file except in compliance with the License.         //
+// You may obtain a copy of the License at                                  //
+//                                                                          //
+//     http://www.apache.org/licenses/LICENSE-2.0                           //
+//                                                                          //
+// Unless required by applicable law or agreed to in writing, software      //
+// distributed under the License is distributed on an "AS IS" BASIS,        //
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. //
+// See the License for the specific language governing permissions and      //
+// limitations under the License.                                           //
+//                                                                          //
 package top.java.matrix.naive;
 
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
-
 import top.java.matrix.Dimension;
 import top.java.matrix.Matrix;
 import top.java.matrix.util.RawFloatMatrix;
@@ -68,7 +82,15 @@ public class NaiveMatrix<ROWS extends Dimension, COLUMNS extends Dimension> impl
     @Override
     public Matrix<COLUMNS, ROWS> transpose()
     {
-        return null;
+        float[] transpose = new float[rows*columns];
+        for (int column = 0; column < columns; column++)
+        {
+            for (int row = 0; row < rows; row++)
+            {
+                transpose[column + row*columns] = matrix[row + column*rows];
+            }
+        }
+        return new NaiveMatrix<>(columns, rows, transpose);
     }
 
     @Override
@@ -113,5 +135,20 @@ public class NaiveMatrix<ROWS extends Dimension, COLUMNS extends Dimension> impl
     public int hashCode()
     {
         return Objects.hash(rows, columns, Arrays.hashCode(matrix));
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder string = new StringBuilder();
+        for (int row = 0; row < rows; row++)
+        {
+            for (int column = 0; column < columns; column++)
+            {
+                string.append(matrix[row + column*rows]).append(' ');
+            }
+            string.append(System.getProperty("line.separator"));
+        }
+        return string.toString();
     }
 }

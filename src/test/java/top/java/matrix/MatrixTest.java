@@ -1,21 +1,34 @@
+//                                                                          //
+// Copyright 2017 Mirko Raner                                               //
+//                                                                          //
+// Licensed under the Apache License, Version 2.0 (the "License");          //
+// you may not use this file except in compliance with the License.         //
+// You may obtain a copy of the License at                                  //
+//                                                                          //
+//     http://www.apache.org/licenses/LICENSE-2.0                           //
+//                                                                          //
+// Unless required by applicable law or agreed to in writing, software      //
+// distributed under the License is distributed on an "AS IS" BASIS,        //
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. //
+// See the License for the specific language governing permissions and      //
+// limitations under the License.                                           //
+//                                                                          //
 package top.java.matrix;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
-
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
-
 import top.java.matrix.Dimension;
 import top.java.matrix.Matrix;
 import top.java.matrix.fast.FastMatrix;
@@ -23,6 +36,10 @@ import top.java.matrix.fast.ReversedFastMatrix;
 import top.java.matrix.fast.TiledFastMatrix;
 import top.java.matrix.naive.NaiveMatrix;
 import top.java.matrix.util.OctaveFloatBinaryReader;
+import top.java.matrix.util.RawFloatMatrix;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assume.assumeThat;
 import static top.java.matrix.util.RawFloatMatrix.FACTORY;
 
 @RunWith(Parameterized.class)
@@ -117,6 +134,34 @@ public class MatrixTest<M extends Dimension>
         Matrix<M, M> expected = squared;
         Matrix<M, M> result = thousand.times(thousand);
         assertEquals(expected, result);
+    }
+
+    @Test
+    public void testSmallTranspose5x2()
+    {
+        assumeThat(constructor, creates(NaiveMatrix.class));
+        final Matrix<M, M> matrix = constructor.construct(FACTORY.create(5, 2, new float[] {1, 3, 5, 7, 9, 2, 4, 6, 8, 10}));
+        Matrix<M, M> expected = constructor.construct(FACTORY.create(2, 5, new float[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}));
+        assertEquals(expected, matrix.transpose());
+    }
+
+    private Matcher<MatrixConstructor<?, ?>> creates(Class<?> type)
+    {
+        final RawFloatMatrix DUMMY = RawFloatMatrix.FACTORY.create(0, 0, new float[] {});
+        return new TypeSafeMatcher<MatrixConstructor<?,?>>()
+        {
+            @Override
+            protected boolean matchesSafely(MatrixConstructor<?, ?> matrixConstructor)
+            {
+                return type.isInstance(matrixConstructor.construct(DUMMY));
+            }
+
+            @Override
+            public void describeTo(Description description)
+            {
+                // TODO: add description
+            }
+        };
     }
 
     private Path path(String name)
