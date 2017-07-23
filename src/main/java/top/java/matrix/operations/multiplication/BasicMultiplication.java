@@ -15,13 +15,10 @@
 //                                                                          //
 package top.java.matrix.operations.multiplication;
 
-import java.util.function.BiFunction;
-
 import top.java.matrix.Dimension;
 import top.java.matrix.Matrix;
 import top.java.matrix.MatrixFactory;
-import top.java.matrix.MatrixOperation;
-import top.java.matrix.naive.NaiveMatrix;
+import top.java.matrix.operations.MatrixMultiplication;
 
 /**
 * Basic matrix multiplication coded in plain Java. Dead slow but easy to understand and
@@ -30,7 +27,7 @@ import top.java.matrix.naive.NaiveMatrix;
 * @author Mirko Raner
 **/
 public class BasicMultiplication<M extends Dimension, N extends Dimension, K extends Dimension>
-extends MatrixOperation implements BiFunction<Matrix<M, K>, Matrix<K, N>, Matrix<M, N>>
+extends MatrixMultiplication<M, N, K>
 {
     public BasicMultiplication(MatrixFactory factory)
     {
@@ -69,6 +66,6 @@ extends MatrixOperation implements BiFunction<Matrix<M, K>, Matrix<K, N>, Matrix
                 result[y + x*rows] = sum;
             }
         }
-        return new NaiveMatrix<>(rows, dimension, result);
+        return factory.create(Dimension.FACTORY.create(rows), Dimension.FACTORY.create(dimension), result);
     }
 }

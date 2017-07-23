@@ -34,6 +34,7 @@ import top.java.matrix.Matrix;
 import top.java.matrix.fast.FastMatrix;
 import top.java.matrix.fast.ReversedFastMatrix;
 import top.java.matrix.fast.TiledFastMatrix;
+import top.java.matrix.internal.StandardMatrix;
 import top.java.matrix.naive.NaiveMatrix;
 import top.java.matrix.util.OctaveFloatBinaryReader;
 import top.java.matrix.util.RawFloatMatrix;
@@ -60,6 +61,7 @@ public class MatrixTest<M extends Dimension>
     {
         Object[][] implementations =
         {
+            {new MatrixConstructor<>(StandardMatrix::new)},
             {new MatrixConstructor<>(NaiveMatrix::new)},
             {new MatrixConstructor<>(ReversedFastMatrix::new)},
             {new MatrixConstructor<>(FastMatrix::new)},

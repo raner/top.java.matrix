@@ -15,6 +15,8 @@ public interface Matrix<ROWS extends Dimension, COLUMNS extends Dimension>
 {
     Function<RawFloatMatrix, Matrix<?, ?>> constructor();
 
+    MatrixFactory factory();
+
     <DIMENSION extends Dimension> Matrix<ROWS, DIMENSION> times(Matrix<COLUMNS, DIMENSION> rightHandSide);
 
     Matrix<COLUMNS, ROWS> transpose();

@@ -7,6 +7,7 @@ import com.aparapi.Kernel;
 import com.aparapi.Range;
 import top.java.matrix.Dimension;
 import top.java.matrix.Matrix;
+import top.java.matrix.MatrixFactory;
 import top.java.matrix.util.RawFloatMatrix;
 
 /**
@@ -177,5 +178,11 @@ public class TiledFastMatrix<ROWS extends Dimension, COLUMNS extends Dimension> 
     public int hashCode()
     {
         return Objects.hash(rows, columns, Arrays.hashCode(matrix));
+    }
+
+    @Override
+    public MatrixFactory factory()
+    {
+        throw new UnsupportedOperationException();
     }
 }

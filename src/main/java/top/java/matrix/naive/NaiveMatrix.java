@@ -20,6 +20,7 @@ import java.util.Objects;
 import java.util.function.Function;
 import top.java.matrix.Dimension;
 import top.java.matrix.Matrix;
+import top.java.matrix.MatrixFactory;
 import top.java.matrix.operations.multiplication.BasicMultiplication;
 import top.java.matrix.util.RawFloatMatrix;
 
@@ -134,5 +135,11 @@ public class NaiveMatrix<ROWS extends Dimension, COLUMNS extends Dimension> impl
             string.append(System.getProperty("line.separator"));
         }
         return string.toString();
+    }
+
+    @Override
+    public MatrixFactory factory()
+    {
+        return NaiveMatrix::new;
     }
 }
