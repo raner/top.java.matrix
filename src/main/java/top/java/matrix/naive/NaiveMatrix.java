@@ -24,7 +24,7 @@ import top.java.matrix.MatrixFactory;
 import top.java.matrix.operations.multiplication.BasicMultiplication;
 import top.java.matrix.util.RawFloatMatrix;
 
-public class NaiveMatrix<ROWS extends Dimension, COLUMNS extends Dimension> implements Matrix<ROWS, COLUMNS>
+public class NaiveMatrix<ROWS extends Dimension, COLUMNS extends Dimension> extends Matrix<ROWS, COLUMNS>
 {
     private int rows;
     private int columns;

@@ -11,21 +11,21 @@ import top.java.matrix.util.RawFloatMatrix;
 *
 * @author Mirko Raner
 **/
-public interface Matrix<ROWS extends Dimension, COLUMNS extends Dimension>
+public abstract class Matrix<ROWS extends Dimension, COLUMNS extends Dimension>
 {
-    Function<RawFloatMatrix, Matrix<?, ?>> constructor();
+    public abstract Function<RawFloatMatrix, Matrix<?, ?>> constructor();
 
-    MatrixFactory factory();
+    public abstract MatrixFactory factory();
 
-    <DIMENSION extends Dimension> Matrix<ROWS, DIMENSION> times(Matrix<COLUMNS, DIMENSION> rightHandSide);
+    public abstract <DIMENSION extends Dimension> Matrix<ROWS, DIMENSION> times(Matrix<COLUMNS, DIMENSION> rightHandSide);
 
-    Matrix<COLUMNS, ROWS> transpose();
+    public abstract Matrix<COLUMNS, ROWS> transpose();
 
-    int getRows();
+    public abstract int getRows();
 
-    int getColumns();
+    public abstract int getColumns();
 
-    float[] getValues();
+    public abstract float[] getValues();
 
-    float at(int zeroIndexedRow, int zeroIndexedColumn);
+    public abstract float at(int zeroIndexedRow, int zeroIndexedColumn);
 }

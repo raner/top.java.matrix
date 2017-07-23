@@ -16,7 +16,7 @@ import top.java.matrix.util.RawFloatMatrix;
 *
 * @author Mirko Raner
 **/
-public class FastMatrix<ROWS extends Dimension, COLUMNS extends Dimension> implements Matrix<ROWS, COLUMNS>
+public class FastMatrix<ROWS extends Dimension, COLUMNS extends Dimension> extends Matrix<ROWS, COLUMNS>
 {
     private int rows;
     private int columns;

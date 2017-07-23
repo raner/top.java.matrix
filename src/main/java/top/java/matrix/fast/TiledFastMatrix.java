@@ -28,7 +28,7 @@ import top.java.matrix.util.RawFloatMatrix;
 *
 * @author Mirko Raner
 **/
-public class TiledFastMatrix<ROWS extends Dimension, COLUMNS extends Dimension> implements Matrix<ROWS, COLUMNS>
+public class TiledFastMatrix<ROWS extends Dimension, COLUMNS extends Dimension> extends Matrix<ROWS, COLUMNS>
 {
     public final static int DEFAULT_TILE_SIZE = 10;
 

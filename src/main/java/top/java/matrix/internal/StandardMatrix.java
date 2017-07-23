@@ -38,7 +38,7 @@ import top.java.matrix.util.RawFloatMatrix;
 *
 * @author Mirko Raner
 **/
-public class StandardMatrix<ROWS extends Dimension, COLUMNS extends Dimension> implements Matrix<ROWS, COLUMNS>
+public class StandardMatrix<ROWS extends Dimension, COLUMNS extends Dimension> extends Matrix<ROWS, COLUMNS>
 {
     private final Dimension rows;
     private final Dimension columns;
