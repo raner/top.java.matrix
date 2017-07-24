@@ -13,23 +13,28 @@
 // See the License for the specific language governing permissions and      //
 // limitations under the License.                                           //
 //                                                                          //
-package top.java.matrix;
+package top.java.matrix.operations;
 
+import org.junit.Test;
+import top.java.matrix.MatrixOperation;
 import top.java.matrix.internal.StandardMatrix;
-import top.java.matrix.operations.multiplication.ReversedFastMultiplication;
+import top.java.matrix.operations.access.DirectElementAccess;
+import top.java.matrix.operations.multiplication.BasicMultiplication;
+import static org.junit.Assert.assertEquals;
 
-/**
-* {@link ReversedFastMatrixTest} is a {@link PerformanceTest} for {@link ReversedFastMatrix} multiplication.
-*
-* @param <M> the dimensions of the matrix
-*
-* @author Mirko Raner
-**/
-public class ReversedFastMatrixTest<M extends Dimension> extends PerformanceTest<M>
+public class MatrixOperationTest
 {
-    @Override
-    protected MatrixConstructor<M, M> constructor()
+    @Test
+    public void getOperationTypeOfBasicMultiplication()
     {
-        return new MatrixTest.ModifiedMatrixConstructor<>(new ReversedFastMultiplication<>(StandardMatrix::new));
+        Class<? extends MatrixOperation> result = new BasicMultiplication<>(StandardMatrix::new).getOperationType();
+        assertEquals(MatrixMultiplication.class, result);
+    }
+
+    @Test
+    public void getOperationTypeOf()
+    {
+        Class<? extends MatrixOperation> result = new DirectElementAccess(StandardMatrix::new).getOperationType();
+        assertEquals(MatrixElementAccess.class, result);
     }
 }

@@ -17,5 +17,5 @@ package top.java.matrix;
 
 public interface MatrixFactory
 {
-    <M extends Dimension, N extends Dimension> Matrix<M, N> create(Dimension rows, Dimension columns, float[] columnMajorArray);
+    <M extends Dimension, N extends Dimension> Matrix<M, N> create(Dimension rows, Dimension columns, float[] columnMajorArray, MatrixOperation... operations);
 }

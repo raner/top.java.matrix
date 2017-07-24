@@ -16,7 +16,6 @@
 package top.java.matrix.operations;
 
 import java.util.function.BiFunction;
-
 import top.java.matrix.Dimension;
 import top.java.matrix.Matrix;
 import top.java.matrix.MatrixFactory;

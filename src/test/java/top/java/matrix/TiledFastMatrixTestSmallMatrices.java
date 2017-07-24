@@ -1,3 +1,18 @@
+//                                                                          //
+// Copyright 2017 Mirko Raner                                               //
+//                                                                          //
+// Licensed under the Apache License, Version 2.0 (the "License");          //
+// you may not use this file except in compliance with the License.         //
+// You may obtain a copy of the License at                                  //
+//                                                                          //
+//     http://www.apache.org/licenses/LICENSE-2.0                           //
+//                                                                          //
+// Unless required by applicable law or agreed to in writing, software      //
+// distributed under the License is distributed on an "AS IS" BASIS,        //
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. //
+// See the License for the specific language governing permissions and      //
+// limitations under the License.                                           //
+//                                                                          //
 package top.java.matrix;
 
 import java.io.File;
@@ -5,8 +20,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import org.junit.Before;
 import org.junit.Test;
-import top.java.matrix.fast.FastMatrix;
-import top.java.matrix.fast.TiledFastMatrix;
+import top.java.matrix.internal.StandardMatrix;
+import top.java.matrix.operations.multiplication.TiledFastMultiplication;
 import top.java.matrix.util.OctaveFloatBinaryReader;
 import top.java.matrix.util.RawFloatMatrix;
 import static org.junit.Assert.assertEquals;
@@ -29,8 +44,9 @@ public class TiledFastMatrixTestSmallMatrices<M extends Dimension>
     public void initializeMatrices() throws IOException
     {
         // TODO: load only once!
-        twenty = new TiledFastMatrix<>(reader.readFloatBinaryMatrix(path("matrix20x20.float.bin")));
-        squared = new TiledFastMatrix<>(reader.readFloatBinaryMatrix(path("square20x20.float.bin")));
+        final TiledFastMultiplication<M, M, M> TFM = new TiledFastMultiplication<>(StandardMatrix::new);
+        twenty = new StandardMatrix<M, M>(reader.readFloatBinaryMatrix(path("matrix20x20.float.bin"))).using(TFM);
+        squared = new StandardMatrix<M, M>(reader.readFloatBinaryMatrix(path("square20x20.float.bin"))).using(TFM);
     }
 
     @Test
@@ -63,12 +79,11 @@ public class TiledFastMatrixTestSmallMatrices<M extends Dimension>
              98,  67,  53,  72,  81,  74,
              91,  72,  65,  73, 109,  56
         };
-        Matrix<M, M> left = new TiledFastMatrix<>(RawFloatMatrix.FACTORY.create(6, 6, matrix1));
-        Matrix<M, M> right = new TiledFastMatrix<>(RawFloatMatrix.FACTORY.create(6, 6, matrix2));
-        Matrix<M, M> expected = new TiledFastMatrix<>(RawFloatMatrix.FACTORY.create(6, 6, product));
+        Matrix<M, M> left = new StandardMatrix<>(RawFloatMatrix.FACTORY.create(6, 6, matrix1));
+        Matrix<M, M> right = new StandardMatrix<>(RawFloatMatrix.FACTORY.create(6, 6, matrix2));
+        Matrix<M, M> expected = new StandardMatrix<>(RawFloatMatrix.FACTORY.create(6, 6, product));
         Matrix<M, M> result = left.times(right);
         assertEquals(expected, result);
-        assertEquals(FastMatrix.class, result.getClass());
     }
 
     @Test
@@ -77,7 +92,6 @@ public class TiledFastMatrixTestSmallMatrices<M extends Dimension>
         Matrix<M, M> expected = squared;
         Matrix<M, M> result = twenty.times(twenty);
         assertEquals(expected, result);
-        assertEquals(TiledFastMatrix.class, result.getClass());
     }
 
     private Path path(String name)

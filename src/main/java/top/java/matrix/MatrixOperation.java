@@ -15,6 +15,13 @@
 //                                                                          //
 package top.java.matrix;
 
+/**
+* {@link MatrixOperation} is the abstract base class for common matrix operations like multiplication or
+* transposition. It is also used for more low-level operations like access to the underlying {@code float}
+* array or individual elements.
+*
+* @author Mirko Raner
+**/
 public abstract class MatrixOperation
 {
     protected MatrixFactory factory;
@@ -22,5 +29,23 @@ public abstract class MatrixOperation
     public MatrixOperation(MatrixFactory factory)
     {
         this.factory = factory;
+    }
+
+    /**
+    * Determines the basic type of operation implemented by this object.
+    *
+    * @return the basic operation type (e.g., {@link top.java.matrix.operations.MatrixMultiplication MatrixMultiplication}
+    * or {@link top.java.matrix.operations.MatrixElementAccess MatrixElementAccess}
+    **/
+    public Class<? extends MatrixOperation> getOperationType()
+    {
+        Class<?> type = getClass();
+        while (!MatrixOperation.class.equals(type.getSuperclass()))
+        {
+            type = type.getSuperclass();
+        }
+        @SuppressWarnings("unchecked")
+        Class<? extends MatrixOperation> result = (Class<? extends MatrixOperation>)type;
+        return result;
     }
 }

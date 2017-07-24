@@ -1,3 +1,18 @@
+//                                                                          //
+// Copyright 2017 Mirko Raner                                               //
+//                                                                          //
+// Licensed under the Apache License, Version 2.0 (the "License");          //
+// you may not use this file except in compliance with the License.         //
+// You may obtain a copy of the License at                                  //
+//                                                                          //
+//     http://www.apache.org/licenses/LICENSE-2.0                           //
+//                                                                          //
+// Unless required by applicable law or agreed to in writing, software      //
+// distributed under the License is distributed on an "AS IS" BASIS,        //
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. //
+// See the License for the specific language governing permissions and      //
+// limitations under the License.                                           //
+//                                                                          //
 package top.java.matrix;
 
 import java.io.File;
@@ -13,7 +28,6 @@ import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 import top.java.matrix.util.OctaveFloatBinaryReader;
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertEquals;
 
 /**
 * {@link PerformanceTest} is an abstract base class for matrix multiplication performance testing.
@@ -29,7 +43,6 @@ public abstract class PerformanceTest<M extends Dimension>
 
     private OctaveFloatBinaryReader reader = new OctaveFloatBinaryReader();
     private Matrix<M, M> thousand;
-    private Matrix<M, M> squared;
 
     @Parameter
     public int repetition;
@@ -45,15 +58,12 @@ public abstract class PerformanceTest<M extends Dimension>
     {
         // TODO: load only once!
         thousand = constructor().construct(reader.readFloatBinaryMatrix(path("Thousand.float.bin")));
-        squared = constructor().construct(reader.readFloatBinaryMatrix(path("Squared.float.bin")));
     }
 
     @Test
     public void testLargeMultiplication1000x1000()
     {
-        Matrix<M, M> expected = squared;
-        Matrix<M, M> result = thousand.times(thousand);
-        assertEquals(expected, result);
+        thousand.times(thousand);
     }
 
     protected abstract MatrixConstructor<M, M> constructor();

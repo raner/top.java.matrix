@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.Stream;
 import top.java.matrix.Dimension;
 import top.java.matrix.Matrix;
 import top.java.matrix.MatrixFactory;
@@ -57,11 +58,12 @@ public class StandardMatrix<ROWS extends Dimension, COLUMNS extends Dimension> e
         this.matrix = matrix.matrix();
     }
 
-    public StandardMatrix(Dimension rows, Dimension columns, float[] matrix)
+    public StandardMatrix(Dimension rows, Dimension columns, float[] matrix, MatrixOperation[] matrixOperation)
     {
         this.rows = rows;
         this.columns = columns;
         this.matrix = matrix;
+        Stream.of(matrixOperation).forEach(operation -> operations.put(operation.getOperationType(), operation));
     }
 
     @Override
@@ -87,8 +89,17 @@ public class StandardMatrix<ROWS extends Dimension, COLUMNS extends Dimension> e
     @Override
     public Matrix<COLUMNS, ROWS> transpose()
     {
-        // TODO Auto-generated method stub
-        return null;
+        int numberOfRows = rows.getAsInt();
+        int numberOfColumns = columns.getAsInt();
+        float[] transpose = new float[numberOfRows*numberOfColumns];
+        for (int column = 0; column < numberOfColumns; column++)
+        {
+            for (int row = 0; row < numberOfRows; row++)
+            {
+                transpose[column + row*numberOfColumns] = matrix[row + column*numberOfRows];
+            }
+        }
+        return factory().create(columns, rows, transpose);
     }
 
     @Override
@@ -115,6 +126,12 @@ public class StandardMatrix<ROWS extends Dimension, COLUMNS extends Dimension> e
     {
         MatrixElementAccess access = operation(MatrixElementAccess.class);
         return access.elementAt(matrix, rows, columns, row, column);
+    }
+
+    @Override
+    public Matrix<ROWS, COLUMNS> using(MatrixOperation... operation)
+    {
+        return factory().create(rows, columns, matrix, operation);
     }
 
     @Override
