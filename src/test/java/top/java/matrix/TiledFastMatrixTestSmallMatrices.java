@@ -16,10 +16,14 @@
 package top.java.matrix;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
-import org.junit.Before;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
 import top.java.matrix.internal.StandardMatrix;
 import top.java.matrix.operations.multiplication.TiledFastMultiplication;
 import top.java.matrix.util.OctaveFloatBinaryReader;
@@ -30,27 +34,31 @@ import static org.junit.Assert.assertEquals;
 * The class {@link TiledFastMatrixTestSmallMatrices} provides additional JUnit tests for
 * {@link TiledFastMatrix} that use smaller matrices.
 *
+* TODO: for some reason this test class does not get picked up by the Maven Surefire plugin
+*
 * @param <M> the dimension of the matrices (number of rows is the same as number of columns)
 *
-* @author mirko
+* @author Mirko Raner
 **/
+@RunWith(Parameterized.class)
 public class TiledFastMatrixTestSmallMatrices<M extends Dimension>
 {
-    private OctaveFloatBinaryReader reader = new OctaveFloatBinaryReader();
-    private Matrix<M, M> twenty;
-    private Matrix<M, M> squared;
+    private static OctaveFloatBinaryReader reader = new OctaveFloatBinaryReader();
 
-    @Before
-    public void initializeMatrices() throws IOException
-    {
-        // TODO: load only once!
-        final TiledFastMultiplication<M, M, M> TFM = new TiledFastMultiplication<>(StandardMatrix::new);
-        twenty = new StandardMatrix<M, M>(reader.readFloatBinaryMatrix(path("matrix20x20.float.bin"))).using(TFM);
-        squared = new StandardMatrix<M, M>(reader.readFloatBinaryMatrix(path("square20x20.float.bin"))).using(TFM);
-    }
+    @Parameter(0)
+    public int size;
 
-    @Test
-    public void testMultiplication6x6()
+    @Parameter(1)
+    public Matrix<M, M> left;
+
+    @Parameter(2)
+    public Matrix<M, M> right;
+
+    @Parameter(3)
+    public Matrix<M, M> expected;
+
+    @Parameters(name="{0}\u00D7{0} matrix")
+    public static List<Object[]> inputsAndOutputs() throws Exception
     {
         float[] matrix1 =
         {
@@ -79,22 +87,28 @@ public class TiledFastMatrixTestSmallMatrices<M extends Dimension>
              98,  67,  53,  72,  81,  74,
              91,  72,  65,  73, 109,  56
         };
+        abstract class M implements Dimension {/**/}
+        final TiledFastMultiplication<M, M, M> TFM = new TiledFastMultiplication<>(StandardMatrix::new);
         Matrix<M, M> left = new StandardMatrix<>(RawFloatMatrix.FACTORY.create(6, 6, matrix1));
         Matrix<M, M> right = new StandardMatrix<>(RawFloatMatrix.FACTORY.create(6, 6, matrix2));
         Matrix<M, M> expected = new StandardMatrix<>(RawFloatMatrix.FACTORY.create(6, 6, product));
-        Matrix<M, M> result = left.times(right);
-        assertEquals(expected, result);
+        Matrix<M, M> twenty = new StandardMatrix<M, M>(reader.readFloatBinaryMatrix(path("matrix20x20.float.bin"))).using(TFM);
+        Matrix<M, M> squared = new StandardMatrix<M, M>(reader.readFloatBinaryMatrix(path("square20x20.float.bin"))).using(TFM);
+        Object[][] parameters =
+        {
+                {left.getRows(), left, right, expected},
+                {twenty.getRows(), twenty, twenty, squared}
+        };
+        return Arrays.asList(parameters);
     }
 
     @Test
-    public void testMultiplication20x20()
+    public void testMultiplication()
     {
-        Matrix<M, M> expected = squared;
-        Matrix<M, M> result = twenty.times(twenty);
-        assertEquals(expected, result);
+        assertEquals(expected, left.times(right));
     }
 
-    private Path path(String name)
+    private static Path path(String name)
     {
         return new File("src/test/resources/" + name).getAbsoluteFile().toPath();
     }
