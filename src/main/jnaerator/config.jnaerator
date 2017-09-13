@@ -1,0 +1,13 @@
+-package top.java.matrix.internal.opencl.jna
+-library OpenCl
+-mode Directory
+-runtime JNA
+-beautifyNames
+-skipDeprecated
+-MCL_API_SUFFIX__VERSION_1_0=
+-MCL_API_SUFFIX__VERSION_1_1=
+-MCL_API_SUFFIX__VERSION_1_2=
+-Dcl_buffer_region=OpenClBufferRegion
+-Dcl_image_format=OpenClImageFormat
+-Dcl_image_desc=OpenClImageDesc
+-I opencl opencl/cl.h

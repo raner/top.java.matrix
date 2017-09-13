@@ -10,6 +10,8 @@
 
  <properties>
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  <jnaerator.version>0.12</jnaerator.version>
+  <projo.version>1.0.0</projo.version>
  </properties>
 
  <dependencies>
@@ -19,14 +21,27 @@
    <version>1.3.4</version>
   </dependency>
   <dependency>
+   <groupId>net.java.dev.jna</groupId>
+   <artifactId>jna</artifactId>
+   <!-- NOTE: due to an incompatibility between jnaerator and JNA, version 4.2.2 is the highest version that can be used -->
+   <!--       jnaerator 0.12 generates a List<?> signature for Structure.getFieldOrder(), but JNA 4.3.0 changed the      -->
+   <!--       base class signature from returning a raw List to a List<String>, which is not type compatible             -->
+   <version>4.2.2</version>
+  </dependency>
+  <dependency>
+   <groupId>com.nativelibs4java</groupId>
+   <artifactId>jnaerator-runtime</artifactId>
+   <version>${jnaerator.version}</version>
+  </dependency>
+  <dependency>
    <groupId>pro.projo</groupId>
    <artifactId>projo</artifactId>
-   <version>1.0.0</version>
+   <version>${projo.version}</version>
   </dependency>
   <dependency>
    <groupId>pro.projo</groupId>
    <artifactId>projo-runtime-code-generation</artifactId>
-   <version>1.0.0</version>
+   <version>${projo.version}</version>
    <scope>runtime</scope>
   </dependency>
   <dependency>
@@ -75,6 +90,20 @@
      <nexusUrl>https://oss.sonatype.org/</nexusUrl>
      <autoReleaseAfterClose>false</autoReleaseAfterClose>
     </configuration>
+   </plugin>
+   <plugin>
+    <groupId>com.nativelibs4java</groupId>
+    <artifactId>maven-jnaerator-plugin</artifactId>
+    <version>${jnaerator.version}</version>
+    <executions>
+     <execution>
+      <id>generate-jna</id>
+      <phase>generate-sources</phase>
+      <goals>
+       <goal>generate</goal>
+      </goals>
+     </execution>
+    </executions>
    </plugin>
   </plugins>
   <pluginManagement>
